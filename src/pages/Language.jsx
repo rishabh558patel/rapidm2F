@@ -66,7 +66,7 @@ const Language = () => {
 
         {/* Submit Button */}
         <div className="mt-6">
-          <NavLink to="/home">
+          <NavLink to="/login">
             <button className="hover:cursor-pointer  w-full py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
               Submit
             </button>
