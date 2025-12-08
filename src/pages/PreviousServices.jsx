@@ -8,7 +8,7 @@ const PreviousServices = () => {
     const fetchRepairs = async () => {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:1001/api/repairs", {
+      const res = await fetch("https://rapidm2b.onrender.com/api/repairs", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

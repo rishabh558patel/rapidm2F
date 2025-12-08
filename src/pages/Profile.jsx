@@ -25,7 +25,7 @@ const Profile = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "http://localhost:1001/api/users/profile",
+          "https://rapidm2b.onrender.com/api/users/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:1001/api/users/profile", {
+      const response = await fetch("https://rapidm2b.onrender.com/api/users/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-      await fetch("http://localhost:1001/api/users/logout", {
+      await fetch("https://rapidm2b.onrender.com/api/users/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -155,7 +155,7 @@ const Profile = () => {
       formData.append("image", file); // backend expects 'image'
 
       const res = await fetch(
-        "http://localhost:1001/api/users/profile-picture",
+        "https://rapidm2b.onrender.com/api/users/profile-picture",
         {
           method: "POST",
           headers: {
@@ -197,7 +197,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "http://localhost:1001/api/users/profile-picture",
+        "https://rapidm2b.onrender.com/api/users/profile-picture",
         {
           method: "DELETE",
           headers: {

@@ -35,7 +35,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:1001/api/users/signup", {
+      const response = await fetch("https://rapidm2b.onrender.com/api/users/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -165,7 +165,7 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={() =>
-                  (window.location.href = "http://localhost:1001/auth/google")
+                  (window.location.href = "https://rapidm2b.onrender.com/auth/google")
                 }
                 className="w-full flex items-center justify-center gap-3 py-2.5 
                bg-white border border-gray-300 text-gray-700 font-semibold 
@@ -183,7 +183,7 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={() =>
-                  (window.location.href = "http://localhost:1001/auth/github")
+                  (window.location.href = "https://rapidm2b.onrender.com/auth/github")
                 }
                 className="w-full flex items-center justify-center gap-3 py-2.5 
                bg-gray-900 text-white font-semibold rounded-lg shadow-sm 

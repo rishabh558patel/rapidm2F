@@ -27,7 +27,7 @@ const Service = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "http://localhost:1001/api/users/profile",
+          "https://rapidm2b.onrender.com/api/users/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
