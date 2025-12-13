@@ -25,7 +25,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://rapidm2b.onrender.com/api/users/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL
+      }/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

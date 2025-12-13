@@ -25,7 +25,7 @@ const Profile = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "https://rapidm2b.onrender.com/api/users/profile",
+          `${import.meta.env.VITE_API_URL}/api/users/profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,15 +73,18 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://rapidm2b.onrender.com/api/users/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ send token to backend
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ send token to backend
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
@@ -109,7 +112,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-      await fetch("https://rapidm2b.onrender.com/api/users/logout", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/users/logout`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -155,7 +158,7 @@ const Profile = () => {
       formData.append("image", file); // backend expects 'image'
 
       const res = await fetch(
-        "https://rapidm2b.onrender.com/api/users/profile-picture",
+        `${import.meta.env.VITE_API_URL}/api/users/profile-picture`,
         {
           method: "POST",
           headers: {
@@ -197,7 +200,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://rapidm2b.onrender.com/api/users/profile-picture",
+        `${import.meta.env.VITE_API_URL}/api/users/profile-picture`,
         {
           method: "DELETE",
           headers: {
@@ -233,27 +236,28 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className="flex items-center justify-center min-h-[calc(100vh-5rem)] px-5 py-10 relative">
-        {/* Background Gradient */}
-        <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-b from-black via-gray-500 to-gray-300"></div>
 
-        <div className="bg-white max-w-lg w-full p-8 rounded-3xl shadow-lg text-center">
-          <div className="flex flex-col items-center">
-            <div className="mb-3">
-              <img
-                src={preview || "/assets/home2.png"}
-                alt="Profile"
-                className="rounded-full h-24 w-24 object-cover border"
-              />
-            </div>
+      <div className="flex justify-center px-4 py-12 relative">
+        {/* Background */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black via-gray-600 to-gray-400" />
 
-            <div className="flex gap-2">
-              <label className="py-2 px-3 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer">
+        {/* Card */}
+        <div className="bg-white w-full max-w-lg rounded-2xl p-8 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
+          {/* ===== Avatar Section ===== */}
+          <div className="flex flex-col items-center pb-6 border-b">
+            <img
+              src={preview || "/assets/home2.png"}
+              alt="Profile"
+              className="h-24 w-24 rounded-full object-cover border"
+            />
+
+            <div className="flex gap-3 mt-3">
+              <label className="text-sm px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer transition">
                 <input
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) => handleFileChange(e)}
+                  onChange={handleFileChange}
                 />
                 Change Photo
               </label>
@@ -261,57 +265,78 @@ const Profile = () => {
               {user?.profilePic && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="py-2 px-3 bg-red-500 text-white rounded"
+                  className="text-sm px-4 py-2 text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition"
                 >
                   Remove
                 </button>
               )}
             </div>
+
+            <h1 className="mt-4 text-xl font-semibold text-gray-900">
+              {formData.name}
+            </h1>
           </div>
 
-          <h1 className="text-gray-900 font-bold text-2xl mt-4">
-            {formData.name}
-          </h1>
-          <div className="h-0.5 w-4/5 bg-gray-300 my-4 mx-auto"></div>
+          {/* ===== Profile Info ===== */}
+          {!editing && (
+            <div className="mt-6 space-y-4 text-sm">
+              {[
+                ["Email", user?.email],
+                ["Contact", user?.contact],
+                ["City", "Rewa"],
+                ["State", "Madhya Pradesh"],
+                ["Country", "India"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between">
+                  <span className="text-gray-500">{label}</span>
+                  <span className="font-medium text-gray-900">{value}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
-          {editing ? (
-            <form onSubmit={handleUpdate} className="text-left space-y-4">
+          {/* ===== Edit Form ===== */}
+          {editing && (
+            <form onSubmit={handleUpdate} className="mt-6 space-y-4">
               <div>
-                <label className="text-gray-700 font-semibold">Full Name</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Full Name
+                </label>
                 <input
-                  type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="text-gray-700 font-semibold">Contact</label>
-                <input
-                  type="contact"
-                  name="contact"
-                  value={formData.contact}
-                  onChange={handleChange}
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-gray-700 font-semibold">Email</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Contact
+                </label>
                 <input
-                  type="email"
-                  name="email"
+                  name="contact"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-600">
+                  Email
+                </label>
+                <input
                   value={formData.email}
                   disabled
-                  className="mt-1 w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                  className="mt-1 w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-3 mt-4 text-white font-semibold rounded-lg shadow-md transition duration-300 ${
+                className={`w-full py-3 rounded-lg font-semibold text-white transition ${
                   loading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-500 hover:bg-blue-600"
@@ -320,42 +345,29 @@ const Profile = () => {
                 {loading ? "Saving..." : "Save Changes"}
               </button>
             </form>
-          ) : (
-            <div className="text-left space-y-3">
-              <p>
-                <strong>Email:</strong> {user?.email}
-              </p>
-              <p>
-                <strong>Contact:</strong> {user?.contact}
-              </p>
-              <p>
-                <strong>City:</strong> {"Rewa"}
-              </p>
-              <p>
-                <strong>State:</strong> {"Madhya Pradesh"}
-              </p>
-              <p>
-                <strong>Country:</strong> {"India"}
-              </p>
+          )}
 
-              <div className="flex flex-col gap-3 mt-5">
-                <button
-                  onClick={() => setEditing(true)}
-                  className="py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
-                >
-                  Edit Profile
-                </button>
+          {/* ===== Actions ===== */}
+          {!editing && (
+            <div className="mt-8 space-y-3">
+              <button
+                onClick={() => setEditing(true)}
+                className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+              >
+                Edit Profile
+              </button>
 
-                <button
-                  onClick={() => navigate("/previous-services")}
-                  className="py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300"
-                >
-                  Previous Services
-                </button>
+              <button
+                onClick={() => navigate("/previous-services")}
+                className="w-full py-3 border border-emerald-600 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-50 transition"
+              >
+                Previous Services
+              </button>
 
+              <div className="pt-4 border-t">
                 <button
                   onClick={handleLogout}
-                  className="py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                  className="w-full py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition"
                 >
                   Logout
                 </button>

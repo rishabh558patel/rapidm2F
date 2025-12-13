@@ -20,7 +20,8 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`https://rapidm2b.onrender.com/api/repairs`, {
+      .get(`${import.meta.env.VITE_API_URL
+      }/api/repairs`, {
         withCredentials: true, // Needed if backend has credentials: true
       })
       .then((response) => {

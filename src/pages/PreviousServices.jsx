@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 
 const PreviousServices = () => {
   const [repairs, setRepairs] = useState([]);
 
   useEffect(() => {
-    const fetchRepairs = async () => {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch("https://rapidm2b.onrender.com/api/repairs", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await res.json();
-      setRepairs(data);
-    };
-
-    fetchRepairs();
+    const token = localStorage.getItem("token");
+  
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/repairs/my`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => setRepairs(res.data))
+      .catch((err) => console.error(err));
   }, []);
+  
+  
 
   return (
     <>

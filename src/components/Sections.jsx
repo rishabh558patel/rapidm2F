@@ -26,7 +26,8 @@ const Sections = () => {
     const fetchCount = async () => {
       try {
         // Preferred: backend returns { count: number }
-        const res = await axios.get("https://rapidm2b.onrender.com/api/users/count");
+        const res = await axios.get(`${import.meta.env.VITE_API_URL
+        }/api/users/count`);
   
         if (mounted && res?.data?.count != null) {
           setCustomerCount(res.data.count);
@@ -40,7 +41,8 @@ const Sections = () => {
       } catch (err) {
         // Last fallback — try users list endpoint
         try {
-          const res2 = await axios.get("https://rapidm2b.onrender.com/api/users");
+          const res2 = await axios.get(`${import.meta.env.VITE_API_URL
+          }/api/users`);
   
           if (mounted && Array.isArray(res2?.data)) {
             setCustomerCount(res2.data.length);
